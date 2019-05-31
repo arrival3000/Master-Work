@@ -284,38 +284,9 @@ Section SetSEqType.
       | |- context [ Elem ?x (Elem ?y _) ] => by rewrite Ident2
     end) => /= //; try intros.
 
-    Ltac matchT' := 
-    repeat (multimatch  goal with
-      | |- context [ AddBSet ] => unfold AddBSet  (* + *)
-      | |- _ /\ _ => split                        (* + *)
-      | |- context [ _ <-> _ ]  => split          (* + *)
-      | |- context [ _ || _ ] => orT              (* + *)
-      | |- context [ _ && _ ] => andT             (* + *)
-      | H : _ \/ _ |- _ => destruct H             (* + *)
-      | H : _ /\ _ |- _ => destruct H             (* + *)
-      | H : context [ _ || _ ] |- _ => orH H      (* + *)
-      | H : context [ _ && _ ] |- _ => andH H     (* + *)
-      | H : context [ _ == _ ] |- _ => eqT H      (* + *)
-      | H : context[ true ] |- _ => clear H       (* + *)
-      | H : ?P, H' : ?P |- _ => clear H'          (* + *)
-      | H : ?P |- _ \/ ?P => right                 (* + *)
-      | H : ?P |- ?P \/ _ => left                  (* + *)
-      | |- _ \/ _ => do [by left | by right]       (* + *)
-      | |- context [ not ] => unfold not           (* + *)
-      | |- context [ notIn ] => unfold notIn       (* + *)
-      | H : context [ not ] |- _ => unfold not in H  (* + *)
-      | H : context [ notIn ] |- _ => unfold notIn  (* + *)
-      | |- context [ is_true(?P) \/ is_true(?P == false) ] => destruct P (* + *)
-      | |- context [ is_true(?P == false) \/ is_true(?P) ] => destruct P (* + *)
-    end) => /= //; try intros.
-
   Ltac baseT := 
     try elim => /= //; intros => /= //;
     repeat matchT.
-
-  Ltac tacQ := 
-    try elim => /= //; intros => /= //;
-    repeat matchT'.
 
   Ltac baseT' :=
     try intros => /= //;
